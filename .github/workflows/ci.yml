@@ -3,7 +3,19 @@ name: CI
 on:
   push:
     branches: [master]
+    # Docs-only changes can't break a check, so they don't run CI. A change
+    # that also touches code still runs everything. Keep both lists in sync.
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "LICENSE"
+      - ".github/ISSUE_TEMPLATE/**"
   pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "LICENSE"
+      - ".github/ISSUE_TEMPLATE/**"
 
 permissions:
   contents: read
