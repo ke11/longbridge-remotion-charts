@@ -1,0 +1,65 @@
+name: Bug report
+description: Something doesn't work: setup, Studio, rendering or the charts.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please check the [Troubleshooting](https://github.com/ke11/longbridge-remotion-charts#troubleshooting) table first; most errors are listed there.
+
+        **Never paste tokens, passwords or account numbers.** This project doesn't need any, so nothing secret is required to diagnose a bug.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what you got instead.
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Error message
+      description: Copy the full error text from the terminal or Studio.
+      render: text
+  - type: textarea
+    id: setup
+    attributes:
+      label: Output of `npm run setup -- --check`
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: chart
+    attributes:
+      label: Which chart?
+      options:
+        - PortfolioLineChart
+        - CompareLineChart
+        - Both / not chart-specific
+    validations:
+      required: true
+  - type: textarea
+    id: props
+    attributes:
+      label: Your settings (props)
+      description: The props JSON or what you set in Studio. Symbols and dates help us reproduce it.
+      render: json
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+  - type: dropdown
+    id: how
+    attributes:
+      label: How were you running it?
+      options:
+        - npm run dev (Studio)
+        - npm run render
+        - Through an AI agent
+        - Other

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Longbridge account, login or quote permissions
+    url: https://open.longbridge.com
+    about: Account, OpenAPI access and quote-limit problems are handled by Longbridge, not this project.
+  - name: Remotion questions
+    url: https://www.remotion.dev/docs
+    about: General Remotion usage (Studio, rendering, licensing).

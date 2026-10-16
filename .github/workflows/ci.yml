@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check (Node ${{ matrix.node }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node: [18, 20, 22]
+        include:
+          # The helper scripts claim to work on Windows; keep them honest.
+          - os: windows-latest
+            node: 22
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Syntax-check helper scripts
+        run: node --check scripts/setup.mjs && node --check scripts/dev.mjs && node --check scripts/render.mjs && node --check scripts/lib.mjs && node --check scripts/longbridge-proxy.mjs
+
+      # Real renders need a logged-in Longbridge CLI, which CI does not have.
+      # Bundling still proves every composition compiles and imports resolve.
+      - name: Bundle
+        run: npx remotion bundle --out-dir build
