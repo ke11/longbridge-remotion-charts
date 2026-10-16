@@ -34,7 +34,7 @@ import {
   toPoints,
   yTicks,
 } from "../PortfolioLineChart/format";
-import { holdingColor, THEMES, TYPE } from "../PortfolioLineChart/theme";
+import { holdingColor, themeColors, TYPE } from "../PortfolioLineChart/theme";
 import { portfolioTimeline, windowDays } from "../PortfolioLineChart/timeline";
 import { SplitBar } from "../PortfolioLineChart/SplitBar";
 import type { CompareLineChartProps } from "./schema";
@@ -69,7 +69,7 @@ export const CompareLineChart: React.FC<CompareLineChartProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const { title, logo, showAttribution } = style;
-  const C = THEMES[style.theme] ?? THEMES.dark;
+  const C = themeColors(style.theme, style.colorConvention);
   const { fps } = useVideoConfig();
 
   const pts = useMemo(
