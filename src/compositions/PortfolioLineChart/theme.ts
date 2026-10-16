@@ -83,8 +83,8 @@ export const TYPE = {
   credit: { fontFamily: SANS, fontSize: 18, fontWeight: 500 },
 } satisfies Record<string, React.CSSProperties>;
 
-// Written in the Hong Kong / mainland convention: `up` (gains) is red and
-// `down` (losses) green. `themeColors` swaps the pairs for the US convention.
+// Written with red gains: `up` (gains) is red and `down` (losses) green, the
+// Hong Kong / mainland convention. `themeColors` swaps the pairs for green gains.
 export const THEMES = {
   dark: {
     bg: "#06080d",
@@ -152,8 +152,8 @@ export const THEMES = {
 
 export type ThemeName = keyof typeof THEMES;
 
-/** `us`: gains green, losses red. `hk`: gains red, losses green. */
-export type ColorConvention = "us" | "hk";
+/** `green`: gains green, losses red. `red`: gains red, losses green. */
+export type GainColor = "green" | "red";
 
 // `THEMES` is `as const`, so each colour is a literal type; widen them so a
 // swapped palette (red where green was) still type-checks.
@@ -181,17 +181,17 @@ const swapUpDown = (t: Palette): Palette => ({
 });
 
 // Built once: components read these every frame.
-const PALETTES: Record<ColorConvention, Record<ThemeName, Palette>> = {
-  hk: THEMES,
-  us: { dark: swapUpDown(THEMES.dark), light: swapUpDown(THEMES.light) },
+const PALETTES: Record<GainColor, Record<ThemeName, Palette>> = {
+  red: THEMES,
+  green: { dark: swapUpDown(THEMES.dark), light: swapUpDown(THEMES.light) },
 };
 
-/** The palette for a theme, with gain/loss colours in the given convention. */
+/** The palette for a theme, with gains drawn in `gainColor`. */
 export function themeColors(
   theme: string,
-  convention: string = "us",
+  gainColor: string = "green",
 ): Palette {
-  const set = PALETTES[convention as ColorConvention] ?? PALETTES.us;
+  const set = PALETTES[gainColor as GainColor] ?? PALETTES.green;
   return set[theme as ThemeName] ?? set.dark;
 }
 

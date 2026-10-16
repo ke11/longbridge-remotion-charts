@@ -106,9 +106,9 @@ In Compare, the **first** stock is your pick and the others (up to 3) are what i
 | Setting | What it does |
 |---|---|
 | `theme` | `dark` or `light`. |
-| `colorConvention` | `us`: gains green, losses red (default). `hk`: gains red, losses green, the Hong Kong / mainland China convention. |
-| `title` | Small heading at the top left. |
-| `logo` | Image shown next to the title: a URL, or a file you put in the `public/` folder (type just its file name). Leave blank for none. |
+| `gainColor` | Colour of a gain. `green` (default): gains green, losses red. `red`: gains red, losses green, the Hong Kong / mainland China convention. |
+| `title` | Small heading at the top left. Default: `WhaleAgent`. |
+| `logo` | Image shown next to the title: a URL, or a file you put in the `public/` folder (type just its file name). Default: `whaleagent.png`. Leave blank for none. |
 | `showAttribution` | Shows "Market data provided by Longbridge AI" at the bottom right. |
 
 ### Render with your own settings from the terminal
@@ -122,7 +122,7 @@ Save your settings in a JSON file, for example `my-portfolio.json`:
     { "symbol": "0700.HK", "quantity": 200, "label": "Tencent", "color": "" },
     { "symbol": "TSLA.US", "quantity": 10, "label": "", "color": "" }
   ],
-  "style": { "theme": "light", "colorConvention": "us", "title": "My Portfolio", "logo": "", "showAttribution": true }
+  "style": { "theme": "light", "gainColor": "green", "title": "My Portfolio", "logo": "", "showAttribution": true }
 }
 ```
 
@@ -136,7 +136,7 @@ Give each group (`config`, `holdings`/`tickers`, `style`) in full. If you leave 
 
 ### Good to know
 
-- Gains are **green** and losses **red** by default. For the Hong Kong / mainland China convention (gains red), set `style.colorConvention` to `hk`.
+- Gains are **green** and losses **red** by default. For the Hong Kong / mainland China convention (gains red), set `style.gainColor` to `red`.
 - Only **`.US`** and **`.HK`** stocks are supported.
 - `700`, `0700` and `0700.HK` all work, but enter a stock the same way each time: a bare `700` becomes `700.HK`, which is counted separately from `0700.HK`.
 - Prices are **forward-adjusted**, so stock splits don't show up as fake crashes.

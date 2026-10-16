@@ -88,7 +88,7 @@ export const PortfolioLineChart: React.FC<PortfolioLineChartProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const { title, logo, showAttribution } = style;
-  const C = themeColors(style.theme, style.colorConvention);
+  const C = themeColors(style.theme, style.gainColor);
   const { fps } = useVideoConfig();
 
   const totalPts = useMemo(

@@ -32,9 +32,9 @@ export const RemotionRoot: React.FC = () => {
           ],
           style: {
             theme: "dark" as const,
-            colorConvention: "us" as const,
-            title: "My Portfolio",
-            logo: "",
+            gainColor: "green" as const,
+            title: "WhaleAgent",
+            logo: "whaleagent.png",
             showAttribution: true,
           },
         }}
@@ -64,9 +64,9 @@ export const RemotionRoot: React.FC = () => {
           ],
           style: {
             theme: "dark" as const,
-            colorConvention: "us" as const,
-            title: "$1,000 in each",
-            logo: "",
+            gainColor: "green" as const,
+            title: "WhaleAgent",
+            logo: "whaleagent.png",
             showAttribution: true,
           },
         }}
