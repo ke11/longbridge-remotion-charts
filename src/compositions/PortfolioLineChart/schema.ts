@@ -27,7 +27,7 @@ const STYLE = {
   theme: "dark" as const,
   gainColor: "green" as const,
   title: "WhaleAgent",
-  logo: "whaleagent.png",
+  logoUrl: "https://whaleagent.io/_emdash/api/media/file/01M1M2A4WW7NQN75CEQS3D96QT.png",
   showAttribution: true,
 };
 
@@ -38,7 +38,7 @@ export const styleSchema = z
     gainColor: z.enum(["green", "red"]).default(STYLE.gainColor),
     title: z.string().default(STYLE.title),
     /** Drawn left of the title. A file in `public/` or a URL; blank → none. */
-    logo: z.string().default(STYLE.logo),
+    logoUrl: z.string().default(STYLE.logoUrl),
     /** The "Market data provided by Longbridge AI" credit, bottom right. */
     showAttribution: z.boolean().default(STYLE.showAttribution),
   })

@@ -34,7 +34,7 @@ export const RemotionRoot: React.FC = () => {
             theme: "dark" as const,
             gainColor: "green" as const,
             title: "WhaleAgent",
-            logo: "whaleagent.png",
+            logoUrl: "https://whaleagent.io/_emdash/api/media/file/01M1M2A4WW7NQN75CEQS3D96QT.png",
             showAttribution: true,
           },
         }}
@@ -66,7 +66,7 @@ export const RemotionRoot: React.FC = () => {
             theme: "dark" as const,
             gainColor: "green" as const,
             title: "WhaleAgent",
-            logo: "whaleagent.png",
+            logoUrl: "https://whaleagent.io/_emdash/api/media/file/01M1M2A4WW7NQN75CEQS3D96QT.png",
             showAttribution: true,
           },
         }}

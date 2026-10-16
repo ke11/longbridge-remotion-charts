@@ -18,6 +18,7 @@ import {
   installCliHint,
   MIN_NODE_MAJOR,
   ok,
+  PERMISSIONS_URL,
 } from "./lib.mjs";
 
 const checkOnly = process.argv.includes("--check");
@@ -58,13 +59,22 @@ else {
   process.exit(1);
 }
 
-// 4. Logged in
+// 4. Logged in — with quote permissions already activated, or quotes are denied
 let login = await checkLogin();
 if (!login.ok && interactive) {
   console.log(
-    `\n  You are not logged in to Longbridge yet. Starting ${bold("longbridge auth login")}…\n` +
-      "  Open the link it prints, sign in, and enter the code.\n",
+    `\n  You are not logged in to Longbridge yet.\n\n` +
+      `  ${bold("First")}, open ${PERMISSIONS_URL}, sign in, and check that\n` +
+      `  Quote permissions shows them activated (a new account shows 6).\n` +
+      `  Logging in without them means every price request is denied.\n\n` +
+      `  Then press Enter to start ${bold("longbridge auth login")}: open the link it\n` +
+      "  prints, sign in, and enter the code.\n",
   );
+  await new Promise((resolve) => {
+    process.stdin.once("data", resolve);
+    process.stdin.once("end", resolve); // Ctrl+D also continues
+  });
+  process.stdin.pause();
   await new Promise((resolve) =>
     spawn(BIN, ["auth", "login"], { stdio: "inherit" }).on("exit", resolve),
   );
@@ -73,10 +83,28 @@ if (!login.ok && interactive) {
 if (login.ok) ok("Logged in to Longbridge");
 else {
   fail(
-    `Not logged in to Longbridge (status: ${login.status}). Run ${bold("longbridge auth login")}, ` +
+    `Not logged in to Longbridge (status: ${login.status}). First check that ` +
+      `${PERMISSIONS_URL} shows Quote permissions activated, then run ${bold("longbridge auth login")}, ` +
       "open the link it prints, sign in, and enter the code.",
   );
   ready = false;
+}
+
+// 5. Quote permissions — a login made while the account had none keeps none,
+// and every price request is denied.
+if (login.ok) {
+  if (login.quotePermissions > 0) {
+    ok(`Quote permissions: ${login.quotePermissions} activated`);
+  } else {
+    fail(
+      "No quote permissions on this login — prices will be denied. " +
+        `Check that ${PERMISSIONS_URL} shows Quote permissions activated (a new ` +
+        `account shows 6), then run ` +
+        `${bold("longbridge auth login")} again. Still no permissions? Run ` +
+        `${bold("longbridge auth logout")}, then ${bold("longbridge auth login")}.`,
+    );
+    ready = false;
+  }
 }
 
 if (ready) {

@@ -24,19 +24,32 @@ Built with [Remotion](https://www.remotion.dev). Market data from [Longbridge](h
 ## What you need
 
 1. **A computer** running macOS, Windows or Linux.
-2. **Node.js 18 or newer.** Download the **LTS** version from <https://nodejs.org> and install it.
-3. **A Longbridge account.** Sign up in the [Longbridge app](https://longbridge.com/download). Basic (LV1) quotes for HK and US stocks are free through the OpenAPI, with a monthly limit on how many different symbols you can look up.
+2. **Node.js 18 or newer.** Download the **LTS** version from <https://nodejs.org> and install it. The installer asks for your computer's password.
+3. **A Longbridge account with its quote permissions activated, before you log in the command-line tool.**
+   1. Sign up in the [Longbridge app](https://longbridge.com/download).
+   2. Open the [Longbridge Developer Center](https://open.longbridge.com/dashboard) and sign in with the same account.
+   3. Check **Quote permissions**: it should show them **activated** (a new account shows **6**). If it shows none, follow the Developer Center's prompts to activate OpenAPI access first.
+
+      ![Quote permissions: Activated 6 / 10](docs/guide/quote-permissions.png)
+
+   > **Check this before you log in the command-line tool** (`npm run setup` / `longbridge auth login`, step 3 of the Quick start below). Signing in to the Developer Center website is fine. A command-line login made while the account has no quote permissions stays without them, so every price request is denied. If that happened, activate them and run `longbridge auth login` again. If it still shows none, run `longbridge auth logout`, then `longbridge auth login`.
+
+   Basic (LV1) quotes for HK and US stocks are free through the OpenAPI, with a monthly limit on how many different symbols you can look up.
 4. **The Longbridge command-line tool (CLI).** Install it with **one** of these:
 
    | Your computer | Paste this into a terminal |
    |---|---|
    | macOS (with [Homebrew](https://brew.sh)) | `brew install --cask longbridge/tap/longbridge-terminal` |
    | macOS / Linux (without Homebrew) | `curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install \| sh` |
-   | Windows (PowerShell) | `iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 \| iex` |
+   | Windows (PowerShell) | `iwr -useb https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 \| iex` |
+
+   The macOS / Linux script may ask for your computer's **login password** (it copies the tool into `/usr/local/bin`). Nothing appears while you type it; that's normal. Your user must be an administrator. Homebrew and the Windows install don't need a password.
 
    After installing, **close the terminal and open a new one**, so it can find the `longbridge` command.
 
 > **What is a terminal?** On macOS, open the **Terminal** app (search with ⌘ + Space). On Windows, open **PowerShell** from the Start menu. You type commands there and press Enter.
+
+> **Windows: "running scripts is disabled on this system"?** PowerShell blocks `npm` by default. Run this once in PowerShell, then try again: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` (answer **Y**; no admin needed). Or type `npm.cmd` instead of `npm`.
 
 ## Quick start
 
@@ -45,7 +58,8 @@ Built with [Remotion](https://www.remotion.dev). Market data from [Longbridge](h
 git clone https://github.com/ke11/longbridge-remotion-charts.git
 cd longbridge-remotion-charts
 
-# 2. Install the project's dependencies (takes a minute; warnings are normal)
+# 2. Install the project's dependencies (takes a minute; warnings and "vulnerabilities" are
+#    normal: do NOT run "npm audit fix --force")
 npm install
 
 # 3. Check everything and log in to Longbridge
@@ -55,9 +69,13 @@ npm run setup
 npm run dev
 ```
 
-No `git`? On the GitHub page, click **Code → Download ZIP**, unzip it, and open a terminal in that folder instead of step 1. (Windows: open the folder in File Explorer, click the address bar, type `powershell` and press Enter.)
+No `git`? On the GitHub page, click **Code → Download ZIP**, unzip it, and open a terminal in that folder instead of step 1.
+- **Windows:** open the folder in File Explorer, click the address bar, type `powershell` and press Enter.
+- **macOS:** in Terminal, type `cd ` (with a space), drag the unzipped folder onto the Terminal window and press Enter. On a new Mac, typing `git` may offer to install "command line developer tools": click **Install** and wait, or use Download ZIP.
 
-In step 3, `npm run setup` checks each requirement and tells you exactly what is missing. If you are not logged in, it starts `longbridge auth login` for you. Open the link it prints, sign in to Longbridge and type in the code. You only do this once per computer.
+In step 3, `npm run setup` checks each requirement and tells you exactly what is missing. If you are not logged in, it reminds you to check your quote permissions first, waits for you to press Enter, then starts `longbridge auth login` for you. Open the link it prints, sign in to Longbridge and type in the code. You only do this once per computer.
+
+After logging in, `npm run setup` checks that the login has quote permissions (`✓ Quote permissions: 6 activated` on a new account). With none, every price request is denied.
 
 In step 4, **Remotion Studio** opens in your browser (usually <http://localhost:3000>).
 
@@ -108,12 +126,12 @@ In Compare, the **first** stock is your pick and the others (up to 3) are what i
 | `theme` | `dark` or `light`. |
 | `gainColor` | Colour of a gain. `green` (default): gains green, losses red. `red`: gains red, losses green, the Hong Kong / mainland China convention. |
 | `title` | Small heading at the top left. Default: `WhaleAgent`. |
-| `logo` | Image shown next to the title: a URL, or a file you put in the `public/` folder (type just its file name). Default: `whaleagent.png`. Leave blank for none. |
+| `logoUrl` | Image shown next to the title: an image URL, or a file you put in the `public/` folder (type just its file name). Default: the WhaleAgent logo URL. Leave blank for none. |
 | `showAttribution` | Shows "Market data provided by Longbridge AI" at the bottom right. |
 
 ### Render with your own settings from the terminal
 
-Save your settings in a JSON file, for example `my-portfolio.json`:
+Save your settings in a JSON file in the project folder (next to `package.json`), for example `my-portfolio.json`. On Windows, in Notepad choose **Save as type: All files**, so it isn't saved as `my-portfolio.json.txt`.
 
 ```json
 {
@@ -122,7 +140,7 @@ Save your settings in a JSON file, for example `my-portfolio.json`:
     { "symbol": "0700.HK", "quantity": 200, "label": "Tencent", "color": "" },
     { "symbol": "TSLA.US", "quantity": 10, "label": "", "color": "" }
   ],
-  "style": { "theme": "light", "gainColor": "green", "title": "My Portfolio", "logo": "", "showAttribution": true }
+  "style": { "theme": "light", "gainColor": "green", "title": "WhaleAgent", "logoUrl": "https://whaleagent.io/_emdash/api/media/file/01M1M2A4WW7NQN75CEQS3D96QT.png", "showAttribution": true }
 }
 ```
 
@@ -150,13 +168,15 @@ Give each group (`config`, `holdings`/`tickers`, `style`) in full. If you leave 
 | `not authenticated`, `token` or `login` errors | Run `longbridge auth login` again. Logins expire if they go unused for a while. |
 | `cannot reach the local proxy` | Start the project with `npm run dev` or `npm run render`, not `npx remotion …` directly. Both start the price proxy for you. |
 | `Port 3011 is used by another program` | Close the other program, or run `LONGBRIDGE_PROXY_PORT=3012 npm run dev` (Windows PowerShell: `$env:LONGBRIDGE_PROXY_PORT=3012; npm run dev`). |
-| `invalid symbol` | The symbol doesn't exist on Longbridge. Use the `NVDA.US` / `0700.HK` style and check the spelling. This is not a login problem. |
-| `no daily bars since …` / `Check the symbol` | Check the spelling, and that the stock was already listed on your start date. |
+| `invalid symbol` | The symbol doesn't exist on Longbridge. Use the `NVDA.US` / `0700.HK` style and check the spelling. This is not a login problem. The real error is near the end (after `An error occurred:`); ignore the long `ProtocolError` text above it. |
+| `no daily bars since …` / `no monthly bars since …` | No prices at all after your start date: the symbol is wrong or delisted. A start date *before* a stock listed is fine: the chart simply starts on the first date every stock has a price. |
 | `only .US and .HK listings are supported` | Remove that symbol; other markets aren't supported. |
 | `Add at least two different tickers to compare.` | CompareLineChart needs 2 to 4 different symbols. |
 | `Add at least one holding with a symbol and a quantity.` | Give at least one holding a symbol and a quantity above 0. |
 | `startDate … is not in the past.` | Pick an earlier start date. |
-| `permission` or `quote` errors from Longbridge | Check your OpenAPI quote access at <https://open.longbridge.com>. You may have used up this month's symbol limit. |
+| Quote **permission denied**, "no quote permission", quota or out-of-limit errors | First run `npm run setup`. If it shows ✗ No quote permissions, you logged in while the account had none: check that the [Developer Center](https://open.longbridge.com/dashboard) shows **Quote permissions** activated (a new account shows 6), then run `longbridge auth login` again (still nothing? `longbridge auth logout`, then `longbridge auth login`). If it shows ✓ Quote permissions, you've probably used up this month's symbol limit; check <https://open.longbridge.com>. |
+| `Request rate limit` | Too many requests at once. Wait a minute and try again. |
+| Can't log in to a US account from mainland China | Run `LONGBRIDGE_REGION=global longbridge auth login`. |
 | Anything else | Run `npm run setup` and fix every line marked ✗. |
 
 ## How it works
@@ -167,7 +187,7 @@ Your Longbridge login stays in the CLI's own storage on your computer. This proj
 
 ```
 scripts/
-  setup.mjs              npm run setup: checks Node, dependencies, CLI and login
+  setup.mjs              npm run setup: checks Node, dependencies, CLI, login and quote permissions
   dev.mjs                npm run dev: proxy + Remotion Studio
   render.mjs             npm run render: proxy + remotion render
   longbridge-proxy.mjs   local price proxy (wraps the Longbridge CLI)

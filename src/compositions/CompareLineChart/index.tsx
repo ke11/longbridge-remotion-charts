@@ -68,7 +68,7 @@ export const CompareLineChart: React.FC<CompareLineChartProps> = ({
   data,
 }) => {
   const frame = useCurrentFrame();
-  const { title, logo, showAttribution } = style;
+  const { title, logoUrl, showAttribution } = style;
   const C = themeColors(style.theme, style.gainColor);
   const { fps } = useVideoConfig();
 
@@ -100,10 +100,10 @@ export const CompareLineChart: React.FC<CompareLineChartProps> = ({
   const { currency, amount, series, dates } = data;
   const themeName = style.theme === "light" ? "light" : "dark";
   const colors = series.map((s, si) => holdingColor(s, si, themeName));
-  const logoSrc = logo?.trim()
-    ? /^(https?:|data:)/.test(logo.trim())
-      ? logo.trim()
-      : staticFile(logo.trim())
+  const logoSrc = logoUrl?.trim()
+    ? /^(https?:|data:)/.test(logoUrl.trim())
+      ? logoUrl.trim()
+      : staticFile(logoUrl.trim())
     : null;
   const count = dates.length;
   const lastIdx = count - 1;
