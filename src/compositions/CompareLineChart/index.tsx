@@ -69,7 +69,7 @@ export const CompareLineChart: React.FC<CompareLineChartProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const { title, logo, showAttribution } = style;
-  const C = themeColors(style.theme, style.colorConvention);
+  const C = themeColors(style.theme, style.gainColor);
   const { fps } = useVideoConfig();
 
   const pts = useMemo(

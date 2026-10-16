@@ -79,7 +79,7 @@ Ask the user for:
 1. Which chart: their **portfolio** (symbols + share counts) or a **comparison** (2 to 4 symbols + an amount).
 2. Start date, and `day` or `month` points (`month` for spans over about 2 years).
 3. Display currency, `USD` or `HKD`.
-4. Optional: title, `dark`/`light` theme, logo, and gain/loss colours: `colorConvention` `us` (gains green, the default) or `hk` (gains red; suggest this for Hong Kong / mainland China viewers).
+4. Optional: title (default `WhaleAgent`), `dark`/`light` theme, logo (default `whaleagent.png` from `public/`; a URL, another file in `public/`, or blank for none), and `gainColor`: `green` (gains green, the default) or `red` (gains red; suggest this for Hong Kong / mainland China viewers).
 
 Symbols: `NVDA.US`, `0700.HK`. A bare `NVDA` means US and a bare `700` means HK. Only `.US` and `.HK` are supported.
 
@@ -94,7 +94,7 @@ Symbols: `NVDA.US`, `0700.HK`. A bare `NVDA` means US and a bare `700` means HK.
     { "symbol": "0700.HK", "quantity": 200, "label": "Tencent", "color": "" },
     { "symbol": "NVDA.US", "quantity": 30, "label": "", "color": "" }
   ],
-  "style": { "theme": "dark", "colorConvention": "us", "title": "My Portfolio", "logo": "", "showAttribution": true }
+  "style": { "theme": "dark", "gainColor": "green", "title": "My Portfolio", "logo": "", "showAttribution": true }
 }
 ```
 

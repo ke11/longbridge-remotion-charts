@@ -25,19 +25,19 @@ const holdingSchema = z
 
 const STYLE = {
   theme: "dark" as const,
-  colorConvention: "us" as const,
-  title: "My Portfolio",
-  logo: "",
+  gainColor: "green" as const,
+  title: "WhaleAgent",
+  logo: "whaleagent.png",
   showAttribution: true,
 };
 
 export const styleSchema = z
   .object({
     theme: z.enum(["dark", "light"]).default(STYLE.theme),
-    /** `us`: gains green, losses red. `hk`: gains red, losses green. */
-    colorConvention: z.enum(["us", "hk"]).default(STYLE.colorConvention),
+    /** Colour of a gain: `green` (losses red) or `red` (losses green, the HK / mainland convention). */
+    gainColor: z.enum(["green", "red"]).default(STYLE.gainColor),
     title: z.string().default(STYLE.title),
-    /** Drawn left of the title. A path under `public/` or a URL; blank → none. */
+    /** Drawn left of the title. A file in `public/` or a URL; blank → none. */
     logo: z.string().default(STYLE.logo),
     /** The "Market data provided by Longbridge AI" credit, bottom right. */
     showAttribution: z.boolean().default(STYLE.showAttribution),
