@@ -17,8 +17,6 @@ HK and US stocks can be mixed freely. Prices are converted into one currency (US
 
 Built with [Remotion](https://www.remotion.dev). Market data from [Longbridge](https://open.longbridge.com/skill?invite-code=FLJS39) through your own Longbridge account. **No API key needed.**
 
-> Not affiliated with or endorsed by Longbridge.
-
 ---
 
 ## What you need
