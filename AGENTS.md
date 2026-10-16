@@ -1,6 +1,6 @@
 # AGENTS.md: install and run guide for AI coding agents
 
-You are helping a user, probably non-technical, get this project running and make a video. Follow these steps in order. Run commands yourself where you can; the user only has to act at the two points marked **USER**.
+You are helping a user, probably non-technical, get this project running and make a video. Follow these steps in order. Run commands yourself where you can; the user only has to act where a step is marked **USER** (installing apps that need their computer password, and logging in to Longbridge).
 
 ## What this project is
 
@@ -13,7 +13,18 @@ Prices come from the **Longbridge CLI** (`longbridge`) through a local proxy (`s
 
 > **Required: the Longbridge account must have its quote permissions activated *before* the CLI login.** A login made while it has none stays without them, and **every price request fails**. **Whenever fetching a quote fails** (permission denied, quota / out of limit, no quote permission, or any other Longbridge quote error **except `invalid symbol`**, which is a typo in the ticker), suspect this first: run `npm run setup -- --check`. If it reports `✗ No quote permissions`, walk the user through Step 4: check https://open.longbridge.com/dashboard → Quote permissions shows them activated (a new account shows 6), then `longbridge auth login` again.
 
-## Step 1: Node.js
+## Step 0: Get the project
+
+If you aren't already inside a clone of this repository (look for this `AGENTS.md` and a `package.json` named `longbridge-remotion-charts`), clone it into the user's home folder and `cd` into it:
+
+```bash
+git clone https://github.com/ke11/longbridge-remotion-charts.git
+cd longbridge-remotion-charts
+```
+
+No `git`? On a new Mac, running `git` offers to install "command line developer tools"; ask the user to click **Install** and wait. Otherwise download https://github.com/ke11/longbridge-remotion-charts/archive/refs/heads/master.zip, unzip it, and work in that folder.
+
+## Step 1: Node.js (**USER** action if missing)
 
 ```bash
 node --version
@@ -54,7 +65,7 @@ Ask the user before running an install script.
 
 After installing, your shell may not see `longbridge` yet. Instead of asking the user to open a new terminal, point the project at the binary for this session with `LONGBRIDGE_BIN`: `/usr/local/bin/longbridge` (curl), `/opt/homebrew/bin/longbridge` (Homebrew on Apple Silicon), or on Windows `$env:LONGBRIDGE_BIN="$env:LOCALAPPDATA\Programs\longbridge\longbridge.exe"`. Then run `npm run setup -- --check` with it set.
 
-## Step 4: Log in (**USER** action)
+## Step 4: Longbridge account and login (**USER** action)
 
 Check:
 
@@ -66,7 +77,7 @@ This never prompts. It exits `0` when everything is ready and `1` otherwise, wit
 
 If it reports **Not logged in** or **✗ No quote permissions**, stop and tell the user, word for word:
 
-> "Before logging in, go to https://open.longbridge.com/dashboard, sign in, and check that **Quote permissions** shows them activated. A new account shows 6. If it shows none, follow the page's prompts to activate OpenAPI access. Tell me when it shows them."
+> "If you don't have a Longbridge account yet, sign up here first: https://open.longbridge.com/skill?invite-code=FLJS39. Then, before logging in, go to https://open.longbridge.com/dashboard, sign in, and check that **Quote permissions** shows them activated. A new account shows 6. If it shows none, follow the page's prompts to activate OpenAPI access. Tell me when it shows them."
 
 **Wait until they confirm.** A command-line login made while the account has no quote permissions stays without them, and every price request is denied. Then log in, using one of these:
 
@@ -101,7 +112,7 @@ Ask the user for:
 
 Symbols: `NVDA.US`, `0700.HK`. A bare `NVDA` means US and a bare `700` means HK. Only `.US` and `.HK` are supported.
 
-**Interactive:** run `npm run dev` (it keeps running; start it in the background if your tool allows) and tell the user to open the Studio URL it prints (usually http://localhost:3000), choose the composition, edit the Props panel and click Render. With the macOS firewall on, the user may see a "node: accept incoming connections?" dialog; denying it is fine.
+**Interactive:** run `npm run dev` (it keeps running; start it in the background if your tool allows) and tell the user to open the Studio URL it prints (usually http://localhost:3000), choose the composition, edit the Props panel and click Render. The rendered MP4 lands in `out/`. With the macOS firewall on, the user may see a "node: accept incoming connections?" dialog; denying it is fine.
 
 **Non-interactive:** write a props file under `out/` (git-ignored) and render it. Give every group in full. A missing group falls back to `src/Root.tsx`; a missing field inside a group falls back to the schema default in `src/compositions/*/schema.ts`, and the two don't always match.
 
@@ -142,6 +153,7 @@ Read the line after `An error occurred:` (it starts with `Error`). Ignore `Was n
 
 | Error | Action |
 |---|---|
+| `running scripts is disabled on this system` (Windows) | Use `npm.cmd` instead of `npm`, or, with the user's OK, run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` (see Step 1). |
 | `cannot reach the local proxy` | The chart was started without `npm run dev`/`npm run render`. Restart it through those. |
 | `Port 3011 is used by another program`, or no output for 30+ seconds after starting | Re-run with another port: `LONGBRIDGE_PROXY_PORT=3012 npm run dev` (PowerShell: `$env:LONGBRIDGE_PROXY_PORT=3012; npm.cmd run dev`). Same for `npm run render`. |
 | `not authenticated` / token errors | Go back to Step 4. |
@@ -151,4 +163,6 @@ Read the line after `An error occurred:` (it starts with `Error`). Ignore `Was n
 | `no daily bars since …` / `no monthly bars since …` | No prices at all after the start date: wrong or delisted symbol. Fix the symbol. (A start date before listing doesn't error; see Step 6.) |
 | `startDate … is not in the past.` | Use an earlier start date. |
 | `only .US and .HK listings are supported` | Other markets have no FX conversion here; drop that symbol. |
-| `Add at least two different tickers to compare.` | CompareLineChart needs 2 or more distinct symbols. |
+| `Add at least two different tickers to compare.` | CompareLineChart needs 2 to 4 distinct symbols. |
+| `Add at least one holding with a symbol and a quantity.` | Give at least one holding a symbol and a quantity above 0. |
+| Can't log in to a US account from mainland China | Run the login with `LONGBRIDGE_REGION=global` in front (see Step 4). |
