@@ -1,6 +1,6 @@
 {
   "name": "longbridge-remotion-charts",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Animated portfolio and stock-comparison videos for HK and US stocks, made with Remotion and Longbridge market data.",
   "license": "MIT",
   "private": true,
