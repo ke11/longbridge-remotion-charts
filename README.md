@@ -2,6 +2,10 @@
 
 Turn your **Hong Kong and US stock** holdings into animated chart videos (MP4, 1920×1080, 60fps).
 
+![Animated portfolio chart: NVDA, TSLA and AAPL from 2021 to 2026](docs/demo.gif)
+
+<sub>Sped up 2.5× for the README; the rendered video plays at normal speed, 60fps.</sub>
+
 | Portfolio | Compare |
 |---|---|
 | ![Portfolio chart](docs/portfolio.png) | ![Compare chart](docs/compare.png) |
