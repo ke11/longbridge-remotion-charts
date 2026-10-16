@@ -15,7 +15,7 @@ Turn your **Hong Kong and US stock** holdings into animated chart videos (MP4, 1
 
 HK and US stocks can be mixed freely. Prices are converted into one currency (USD or HKD) of your choice.
 
-Built with [Remotion](https://www.remotion.dev). Market data from [Longbridge](https://longbridge.com) through your own Longbridge account. **No API key needed.**
+Built with [Remotion](https://www.remotion.dev). Market data from [Longbridge](https://open.longbridge.com/skill?invite-code=FLJS39) through your own Longbridge account. **No API key needed.**
 
 > Not affiliated with or endorsed by Longbridge.
 
@@ -26,7 +26,7 @@ Built with [Remotion](https://www.remotion.dev). Market data from [Longbridge](h
 1. **A computer** running macOS, Windows or Linux.
 2. **Node.js 18 or newer.** Download the **LTS** version from <https://nodejs.org> and install it. The installer asks for your computer's password.
 3. **A Longbridge account with its quote permissions activated, before you log in the command-line tool.**
-   1. Sign up in the [Longbridge app](https://longbridge.com/download).
+   1. Sign up for [Longbridge](https://open.longbridge.com/skill?invite-code=FLJS39), or in the [Longbridge app](https://longbridge.com/download).
    2. Open the [Longbridge Developer Center](https://open.longbridge.com/dashboard) and sign in with the same account.
    3. Check **Quote permissions**: it should show them **activated** (a new account shows **6**). If it shows none, follow the Developer Center's prompts to activate OpenAPI access first.
 
