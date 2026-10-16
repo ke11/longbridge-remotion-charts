@@ -1,0 +1,11 @@
+node_modules
+out
+build
+.DS_Store
+
+# Never commit credentials. This project needs none — the Longbridge CLI keeps
+# its own login outside the repo — but just in case:
+.env
+.env.*
+*.pem
+*.key

@@ -1,0 +1,29 @@
+{
+  "name": "longbridge-remotion-charts",
+  "version": "1.0.0",
+  "description": "Animated portfolio and stock-comparison videos for HK and US stocks, made with Remotion and Longbridge market data.",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "node scripts/dev.mjs",
+    "render": "node scripts/render.mjs",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.458",
+    "@remotion/google-fonts": "4.0.458",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.458",
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "@types/web": "0.0.166",
+    "typescript": "5.9.3"
+  }
+}
