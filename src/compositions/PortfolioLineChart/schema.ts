@@ -25,6 +25,7 @@ const holdingSchema = z
 
 const STYLE = {
   theme: "dark" as const,
+  colorConvention: "us" as const,
   title: "My Portfolio",
   logo: "",
   showAttribution: true,
@@ -33,6 +34,8 @@ const STYLE = {
 export const styleSchema = z
   .object({
     theme: z.enum(["dark", "light"]).default(STYLE.theme),
+    /** `us`: gains green, losses red. `hk`: gains red, losses green. */
+    colorConvention: z.enum(["us", "hk"]).default(STYLE.colorConvention),
     title: z.string().default(STYLE.title),
     /** Drawn left of the title. A path under `public/` or a URL; blank → none. */
     logo: z.string().default(STYLE.logo),

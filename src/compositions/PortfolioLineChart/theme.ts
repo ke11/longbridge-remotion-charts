@@ -83,8 +83,8 @@ export const TYPE = {
   credit: { fontFamily: SANS, fontSize: 18, fontWeight: 500 },
 } satisfies Record<string, React.CSSProperties>;
 
-// Gains are red and losses green — the Hong Kong / mainland convention,
-// the reverse of the US one.
+// Written in the Hong Kong / mainland convention: `up` (gains) is red and
+// `down` (losses) green. `themeColors` swaps the pairs for the US convention.
 export const THEMES = {
   dark: {
     bg: "#06080d",
@@ -149,6 +149,51 @@ export const THEMES = {
     ],
   },
 } as const;
+
+export type ThemeName = keyof typeof THEMES;
+
+/** `us`: gains green, losses red. `hk`: gains red, losses green. */
+export type ColorConvention = "us" | "hk";
+
+// `THEMES` is `as const`, so each colour is a literal type; widen them so a
+// swapped palette (red where green was) still type-checks.
+type Widen<T> = T extends string
+  ? string
+  : T extends number
+    ? number
+    : T extends readonly (infer U)[]
+      ? readonly Widen<U>[]
+      : T;
+type Palette = {
+  readonly [K in keyof (typeof THEMES)["dark"]]: Widen<
+    (typeof THEMES)["dark"][K]
+  >;
+};
+
+const swapUpDown = (t: Palette): Palette => ({
+  ...t,
+  up: t.down,
+  upWash: t.downWash,
+  down: t.up,
+  downWash: t.upWash,
+  lineUp: t.lineDown,
+  lineDown: t.lineUp,
+});
+
+// Built once: components read these every frame.
+const PALETTES: Record<ColorConvention, Record<ThemeName, Palette>> = {
+  hk: THEMES,
+  us: { dark: swapUpDown(THEMES.dark), light: swapUpDown(THEMES.light) },
+};
+
+/** The palette for a theme, with gain/loss colours in the given convention. */
+export function themeColors(
+  theme: string,
+  convention: string = "us",
+): Palette {
+  const set = PALETTES[convention as ColorConvention] ?? PALETTES.us;
+  return set[theme as ThemeName] ?? set.dark;
+}
 
 /**
  * A company's own colour, where it has one a viewer would recognise. Keyed

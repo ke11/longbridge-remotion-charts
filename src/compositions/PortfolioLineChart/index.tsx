@@ -36,7 +36,7 @@ import {
 } from "./format";
 import type { PortfolioLineChartProps } from "./schema";
 import { SplitBar } from "./SplitBar";
-import { holdingColor, THEMES, TYPE } from "./theme";
+import { holdingColor, themeColors, TYPE } from "./theme";
 import { portfolioTimeline, windowDays } from "./timeline";
 
 const PLOT: Box = { x: 170, y: 424, w: 1630, h: 416 };
@@ -88,7 +88,7 @@ export const PortfolioLineChart: React.FC<PortfolioLineChartProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const { title, logo, showAttribution } = style;
-  const C = THEMES[style.theme] ?? THEMES.dark;
+  const C = themeColors(style.theme, style.colorConvention);
   const { fps } = useVideoConfig();
 
   const totalPts = useMemo(
