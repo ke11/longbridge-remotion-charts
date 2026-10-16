@@ -26,8 +26,8 @@ export const RemotionRoot: React.FC = () => {
             durationSeconds: 0,
           },
           holdings: [
-            { symbol: "0700.HK", quantity: 100, label: "Tencent", color: "" },
             { symbol: "NVDA.US", quantity: 50, label: "", color: "" },
+            { symbol: "TSLA.US", quantity: 10, label: "", color: "" },
             { symbol: "AAPL.US", quantity: 20, label: "", color: "" },
           ],
           style: {
