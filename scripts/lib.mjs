@@ -11,6 +11,9 @@ const require = createRequire(import.meta.url);
 
 export const MIN_NODE_MAJOR = 18;
 
+/** Where a user checks their quote permissions before logging in. */
+export const PERMISSIONS_URL = "https://open.longbridge.com/dashboard";
+
 const color = (code) => (s) =>
   process.stdout.isTTY ? `\x1b[${code}m${s}\x1b[0m` : s;
 export const green = color(32);
@@ -23,11 +26,13 @@ export const fail = (msg) => console.log(`${red("✗")} ${msg}`);
 export const warn = (msg) => console.log(`${yellow("!")} ${msg}`);
 
 export const INSTALL_CLI = {
-  darwin: "brew install --cask longbridge/tap/longbridge-terminal",
+  darwin:
+    "brew install --cask longbridge/tap/longbridge-terminal   (if you have Homebrew)\n" +
+    "    curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh   (otherwise; may ask for your computer password)",
   linux:
     "curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh",
   win32:
-    "iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex",
+    "iwr -useb https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex",
 };
 
 export const installCliHint = () =>
@@ -50,7 +55,12 @@ export async function checkCli() {
   }
 }
 
-/** `{ ok, status }` — ok only when the CLI reports a valid login token. */
+/**
+ * `{ ok, status, quotePermissions }` — ok only when the CLI reports a valid
+ * login token; `quotePermissions` counts the account's activated quote
+ * packages. A login made while the account had none keeps none, and every
+ * price request is denied.
+ */
 export async function checkLogin() {
   try {
     const { stdout } = await execFileAsync(
@@ -58,17 +68,22 @@ export async function checkLogin() {
       ["auth", "status", "--format", "json"],
       { timeout: 30_000 },
     );
-    const status = JSON.parse(stdout)?.token?.status ?? "unknown";
-    return { ok: status === "valid", status };
+    const json = JSON.parse(stdout);
+    const status = json?.token?.status ?? "unknown";
+    const quotePermissions = (json?.account?.activated_packages ?? []).length;
+    return { ok: status === "valid", status, quotePermissions };
   } catch {
-    return { ok: false, status: "not logged in" };
+    return { ok: false, status: "not logged in", quotePermissions: 0 };
   }
 }
 
 /** Is a proxy (ours, from another terminal) already answering on the port? */
 async function proxyAlreadyRunning(port) {
   try {
-    const res = await fetch(`http://127.0.0.1:${port}/health`);
+    // Something that holds the port but never answers must not stall startup.
+    const res = await fetch(`http://127.0.0.1:${port}/health`, {
+      signal: AbortSignal.timeout(2000),
+    });
     return res.ok && (await res.json()).ok === true;
   } catch {
     return false;
@@ -135,7 +150,12 @@ export async function preflight() {
   const login = await checkLogin();
   if (!login.ok) {
     warn(
-      `Longbridge CLI is not logged in — charts cannot load prices. Run ${bold("longbridge auth login")}.`,
+      `Longbridge CLI is not logged in — charts cannot load prices. Run ${bold("npm run setup")}.`,
+    );
+  } else if (login.quotePermissions === 0) {
+    warn(
+      `No quote permissions — charts cannot load prices. Check that ${PERMISSIONS_URL} ` +
+        `shows Quote permissions activated, then run ${bold("longbridge auth login")} again.`,
     );
   }
 }

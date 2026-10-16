@@ -11,7 +11,7 @@ export const calculatePortfolioLineChartMetadata: CalculateMetadataFunction<
   PortfolioLineChartProps
 > = async ({ props }) => {
   // `--props` replaces a group wholesale — `{"style":{"theme":"dark"}}` arrives
-  // with no title, logo or attribution flag. Parsing fills each gap from the
+  // with no title, logoUrl or attribution flag. Parsing fills each gap from the
   // schema defaults, so a partial override can never reach the component.
   const parsed = portfolioLineChartSchema.parse(props);
   const { config } = parsed;

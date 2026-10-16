@@ -63,10 +63,18 @@ export async function fetchLongbridgeSeries(
   const json = (await res.json().catch(() => ({}))) as LongbridgeProxyResponse;
   if (!res.ok || json.error) {
     const detail = json.error ?? `HTTP ${res.status}`;
-    // `invalid symbol` is a typo in the ticker, not a login problem.
-    const hint = /not authenticated|unauthori[sz]ed|token|login/i.test(detail)
-      ? " — run `longbridge auth login`."
-      : "";
+    // `invalid symbol` is a typo in the ticker, not an account problem.
+    const hint = /invalid symbol/i.test(detail)
+      ? ""
+      : /rate limit/i.test(detail)
+        ? " — too many requests at once; wait a minute and try again."
+      : /permission|denied|quota|out of limit|exceed/i.test(detail)
+        ? " — check that https://open.longbridge.com/dashboard shows Quote " +
+          "permissions activated, then run `longbridge auth login` again. " +
+          "See Troubleshooting in the README."
+        : /not authenticated|unauthori[sz]ed|token|login/i.test(detail)
+          ? " — run `longbridge auth login`."
+          : "";
     throw new Error(`Longbridge ${symbol}: ${detail}${hint}`);
   }
   return json.bars ?? [];

@@ -87,7 +87,7 @@ export const PortfolioLineChart: React.FC<PortfolioLineChartProps> = ({
   data,
 }) => {
   const frame = useCurrentFrame();
-  const { title, logo, showAttribution } = style;
+  const { title, logoUrl, showAttribution } = style;
   const C = themeColors(style.theme, style.gainColor);
   const { fps } = useVideoConfig();
 
@@ -123,10 +123,10 @@ export const PortfolioLineChart: React.FC<PortfolioLineChartProps> = ({
   const { currency, totals, holdings, dates } = data;
   const themeName = style.theme === "light" ? "light" : "dark";
   const colors = holdings.map((h, hi) => holdingColor(h, hi, themeName));
-  const logoSrc = logo?.trim()
-    ? /^(https?:|data:)/.test(logo.trim())
-      ? logo.trim()
-      : staticFile(logo.trim())
+  const logoSrc = logoUrl?.trim()
+    ? /^(https?:|data:)/.test(logoUrl.trim())
+      ? logoUrl.trim()
+      : staticFile(logoUrl.trim())
     : null;
   const count = totals.length;
   const lastIdx = count - 1;
