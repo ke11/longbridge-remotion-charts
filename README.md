@@ -13,7 +13,7 @@ Turn your **Hong Kong and US stock** holdings into animated chart videos (MP4, 1
 - **Portfolio** chart: your shares (for example 100 Tencent + 50 Nvidia) added up into one portfolio value, animated over time.
 - **Compare** chart: put the same amount (for example $1,000) into 2 to 4 stocks on the same day and watch which one wins.
 
-Mix HK and US stocks freely; everything is shown in one currency (USD or HKD). Prices come from your own [Longbridge](https://open.longbridge.com/skill?invite-code=FLJS39) account. **No API key needed.** Built with [Remotion](https://www.remotion.dev).
+Mix HK and US stocks freely; everything is shown in one currency (USD or HKD). Prices come from your own [Longbridge](https://open.longbridge.com) account. **No API key needed.** Built with [Remotion](https://www.remotion.dev).
 
 > **Prefer to let an AI do the setup?** If you use Claude Code, Codex, Cursor or another AI coding assistant, ask it: *"Clone https://github.com/ke11/longbridge-remotion-charts, follow its AGENTS.md to set it up, and make me a video."* It does the setup and walks you through the few steps only you can do.
 
@@ -43,6 +43,7 @@ Node.js is what runs this project. Download the **LTS** version from <https://no
 Quote permissions are what let your account fetch stock prices.
 
 1. Sign up for [Longbridge](https://open.longbridge.com/skill?invite-code=FLJS39).
+   This is the author's referral link (code `FLJS39`): you get a 7-day Pro Plan, and the author may receive a referral reward. Prefer not to? [Sign up without it](https://open.longbridge.com).
 2. Open the [Longbridge Developer Center](https://open.longbridge.com/dashboard) and sign in with the same account.
 3. Look at **Quote permissions**. It should say **Activated**, with a number (a new account shows **6**):
 
